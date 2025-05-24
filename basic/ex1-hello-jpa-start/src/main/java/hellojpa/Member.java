@@ -19,6 +19,8 @@ public class Member {
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
 
+    // 연관 관계 주인은 외래키를 가지고 있는 곳을 주인으로 정하라.
+    // ~ToOne 일 경우, 연관 관계 주인을 잡는 것이 설계적으로 깔끔하다.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;

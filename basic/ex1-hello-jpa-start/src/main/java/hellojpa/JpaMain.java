@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.List;
 
 @Slf4j
 public class JpaMain {
@@ -28,13 +29,20 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
-            // 1차 캐시가 아니라 DB 에 직접 넣고 조회를 해보고 싶을 때의 방법
-//            em.flush();
-//            em.clear();
+            Member member2 = new Member();
+            member2.setUsername("memberB");
+            member2.setTeam(team);
+            em.persist(member2);
+
+            em.flush();
+            em.clear();
 
             Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-            log.info("findTeam = {}", findTeam.getName());
+            List<Member> members = findMember.getTeam().getMembers();
+
+            for (Member m : members) {
+                log.info("find Member username = {}", m.getUsername());
+            }
 
             tx.commit();
         } catch (Exception e) {
