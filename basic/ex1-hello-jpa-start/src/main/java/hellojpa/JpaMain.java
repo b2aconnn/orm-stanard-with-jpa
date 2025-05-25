@@ -3,7 +3,6 @@ package hellojpa;
 import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 @Slf4j
@@ -29,20 +28,14 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
-            Member member2 = new Member();
-            member2.setUsername("memberB");
-            member2.setTeam(team);
-            em.persist(member2);
+            // DB 에 실제 flush가 안 된 상태에서,
+            // 1차 캐시에서 team.getMembers() 조회를 할 때 우리가 기대하는 member가 없기 때문에 (현재 로직은 빈 값)
+            // 객체 지향 관점에서 같이 넣어주는 게 맞음.
+            // 테스트 케이스에서도 문제가 발생함.
+            team.getMembers().add(member);
 
-            em.flush();
-            em.clear();
-
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();
-
-            for (Member m : members) {
-                log.info("find Member username = {}", m.getUsername());
-            }
+//            em.flush();
+//            em.clear();
 
             tx.commit();
         } catch (Exception e) {
