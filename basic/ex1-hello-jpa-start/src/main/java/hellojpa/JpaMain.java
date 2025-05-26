@@ -3,6 +3,7 @@ package hellojpa;
 import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -18,10 +19,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Movie movie = new Movie();
-            movie.setName("movieA");
-            movie.setDirector("directorA");
-            em.persist(movie);
+            Member member = new Member();
+            member.setCreatedBy("memberA");
+            member.setUsername("memberA");
+            member.setCreatedDate(LocalDateTime.now());
+
+            em.persist(member);
 
 //            em.flush();
 //            em.clear();
