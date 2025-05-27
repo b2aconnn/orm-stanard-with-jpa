@@ -2,9 +2,15 @@ package hellojpa;
 
 import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.engine.spi.EntityEntry;
+import org.hibernate.engine.spi.PersistenceContext;
+import org.hibernate.engine.spi.SessionImplementor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class JpaMain {
@@ -19,19 +25,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setCreatedBy("memberA");
-            member.setUsername("memberA");
-            member.setCreatedDate(LocalDateTime.now());
+            Parent parent = new Parent();
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            em.persist(member);
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-//            em.flush();
-//            em.clear();
+            em.persist(parent);
 
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }

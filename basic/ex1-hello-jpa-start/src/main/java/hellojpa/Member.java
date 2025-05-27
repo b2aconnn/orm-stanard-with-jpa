@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,17 +20,22 @@ public class Member extends BaseEntity {
     @Column(name = "USERNAME")
     private String username;
 
-    // 연관 관계 주인은 외래키를 가지고 있는 곳을 주인으로 정하라.
-    // ~ToOne 일 경우, 연관 관계 주인을 잡는 것이 설계적으로 깔끔하다.
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    // 기간
+    @Embedded
+    private Period workPeriod;
 
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
+    // 주소
+    @Embedded
+    private Address homeAddress;
 
-    // 조회용
-    @OneToMany(mappedBy = "member")
-    private List<MemberProduct> memberProducts = new ArrayList<>();
+    // 임베디드 타입을 한 엔티티에서 여러개 사용하고 싶을 떄 속성 오버라이드를 해줘야 한다.
+    // 동일한 이름의 상태값들이 하나의 엔티티에 중복되면 하이버네이트에서 구분을 못 하기 떄문이다.
+    @AttributeOverrides({
+        @AttributeOverride(name = "city", column = @Column(name = "work_city")),
+        @AttributeOverride(name = "street", column = @Column(name = "work_street")),
+        @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
+    })
+    @Embedded
+    private Address workAddress;
+
 }
