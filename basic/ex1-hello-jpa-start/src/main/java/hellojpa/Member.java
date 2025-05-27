@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter @Setter
@@ -19,23 +21,25 @@ public class Member extends BaseEntity {
 
     @Column(name = "USERNAME")
     private String username;
-
-    // 기간
-    @Embedded
-    private Period workPeriod;
-
     // 주소
     @Embedded
     private Address homeAddress;
 
-    // 임베디드 타입을 한 엔티티에서 여러개 사용하고 싶을 떄 속성 오버라이드를 해줘야 한다.
-    // 동일한 이름의 상태값들이 하나의 엔티티에 중복되면 하이버네이트에서 구분을 못 하기 떄문이다.
-    @AttributeOverrides({
-        @AttributeOverride(name = "city", column = @Column(name = "work_city")),
-        @AttributeOverride(name = "street", column = @Column(name = "work_street")),
-        @AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
-    })
-    @Embedded
-    private Address workAddress;
+    // 값 타입 컬렉션 대신 엔티티 연관 관계로 푸는 게 더 나은 선택일 가능성이 높다라고 생각함.
+    // cascade = ALL, orpahnRemoval = true 때문에 member 가 삭제가 되면,
+    // 같이 history도 삭제되면 안 되는데 같이 삭제 되는 위험이 있지 않을까도 생각됨.
+    // 또 값을 update 할 때, joinColum 관련해 delete 다 하고, 다시 insert를 하는 구조로 동작함.
+    // 위와 같을 때는 전체 값을 키로 잡는 방법이 있지만, 언제 어떻게 키로 잡으면 안 되는 상황이 올 수도 있을 거 같아서..
+    // 그냥 차라리 엔티티 연관 관계로 푸는 게 유지보수하기 좋지 않을까라는 생각이 듦.
+
+    // 정말 정말 단순한 (ex. 셀렉트 박스로 필요한 값들? 크게 중요하지 않은?) 상태 저장할 때 쓰면 괜찮을 듯?
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    private List<Address> addressHistory = new ArrayList<>();
 
 }

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-//@Embeddable
+@Embeddable
 public class Period {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
