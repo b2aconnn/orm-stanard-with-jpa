@@ -1,9 +1,6 @@
 package jpabook.jpashop.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,8 +13,8 @@ public class Delivery {
     @Column(name = "DELIVERY_ID")
     private Long id;
 
-    private String city;
-    private String street;
-    private String zipcode;
+    @Embedded
+    private Address address;
+
     private DeliveryStatus status;
 }

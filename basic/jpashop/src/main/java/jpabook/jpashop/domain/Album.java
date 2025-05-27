@@ -1,11 +1,12 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@EqualsAndHashCode
 @Getter @Setter
 @NoArgsConstructor
 @Entity
