@@ -1,11 +1,10 @@
 package hellojpa;
 
-import jakarta.persistence.Embeddable;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter @Setter
+@AllArgsConstructor
+@EqualsAndHashCode
+@Getter
 @NoArgsConstructor
 //@Embeddable
 public class Address {
