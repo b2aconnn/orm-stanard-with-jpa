@@ -25,21 +25,19 @@ public class JpaMain {
             member.setUsername("userA");
             em.persist(member);
 
-            // null return 할 경우, NoResultException이 반한되는데
-            // spring data jpa 에서는 추상화해서 제공하기 때문에 내부에서 exception catch 후에 return을 null 이나 Optional을 return 해준다.
-//            Member findMember = em.createQuery("select m from Member m where m.id = :id", Member.class)
-//                    .setParameter("id", 2)
-//                    .getSingleResult();
-//            log.info("username : {}", findMember.getUsername());
+            Member member2 = new Member();
+            member2.setUsername("userB");
+            em.persist(member2);
 
-            String query = "select m from Member m join m.team";
-            List<Member> resultList =
-                    em.createQuery(query, Member.class)
+            // hibernate 6.1 version 부터 from 절 서브쿼리가 가능함.
+            // 서브 쿼리 안의 select 문에 꼭 alias 붙여야 함.
+            String query = "select mm.username from (select m2.username as username from Member m2) as mm";
+            List<String> resultList =
+                    em.createQuery(query, String.class)
                     .getResultList();
 
-            for (Member findMember : resultList) {
-                log.info("member : {}", findMember.getUsername());
-                log.info("team : {}", findMember.getTeam().getName());
+            for (String findMember : resultList) {
+                log.info("username : {}", findMember);
             }
 
             tx.commit();
