@@ -32,13 +32,14 @@ public class JpaMain {
 //                    .getSingleResult();
 //            log.info("username : {}", findMember.getUsername());
 
-            List<MemberDto> resultList = em.createQuery("select new jpql.MemberDto(m.username, m.age) from Member m", MemberDto.class)
-                    .setFirstResult(5)
-                    .setMaxResults(10)
+            String query = "select m from Member m join m.team";
+            List<Member> resultList =
+                    em.createQuery(query, Member.class)
                     .getResultList();
 
-            for (MemberDto memberDto : resultList) {
-                log.info("memberDto : {}", memberDto.getUsername());
+            for (Member findMember : resultList) {
+                log.info("member : {}", findMember.getUsername());
+                log.info("team : {}", findMember.getTeam().getName());
             }
 
             tx.commit();
