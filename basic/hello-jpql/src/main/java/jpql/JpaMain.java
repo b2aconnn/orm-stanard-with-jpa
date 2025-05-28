@@ -23,21 +23,21 @@ public class JpaMain {
         try {
             Member member = new Member();
             member.setUsername("userA");
+            member.setType(MemberType.ADMIN);
             em.persist(member);
 
             Member member2 = new Member();
             member2.setUsername("userB");
+            member2.setType(MemberType.USER);
             em.persist(member2);
-
-            // hibernate 6.1 version 부터 from 절 서브쿼리가 가능함.
-            // 서브 쿼리 안의 select 문에 꼭 alias 붙여야 함.
-            String query = "select mm.username from (select m2.username as username from Member m2) as mm";
-            List<String> resultList =
-                    em.createQuery(query, String.class)
+            
+            String query = "select m2.type as username from Member m2 where m2.type = jpql.MemberType.ADMIN";
+            List<MemberType> resultList =
+                    em.createQuery(query, MemberType.class)
                     .getResultList();
 
-            for (String findMember : resultList) {
-                log.info("username : {}", findMember);
+            for (MemberType item : resultList) {
+                log.info("result : {}", item);
             }
 
             tx.commit();
