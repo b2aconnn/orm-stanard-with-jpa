@@ -4,7 +4,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
-import jpabook.jpashop.domain.Book;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jpabook.jpashop.domain.Member;
+
+import java.util.List;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -16,14 +21,6 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Book book = new Book();
-            book.setAuthor("author");
-            book.setIsbn("isbn");
-            book.setName("name");
-            book.setPrice(1000);
-
-            em.persist(book);
-
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
