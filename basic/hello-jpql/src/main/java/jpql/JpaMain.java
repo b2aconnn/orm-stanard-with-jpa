@@ -33,6 +33,8 @@ public class JpaMain {
 //            log.info("username : {}", findMember.getUsername());
 
             List<MemberDto> resultList = em.createQuery("select new jpql.MemberDto(m.username, m.age) from Member m", MemberDto.class)
+                    .setFirstResult(5)
+                    .setMaxResults(10)
                     .getResultList();
 
             for (MemberDto memberDto : resultList) {
