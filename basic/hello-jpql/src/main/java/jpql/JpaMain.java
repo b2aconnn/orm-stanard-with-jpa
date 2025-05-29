@@ -72,8 +72,14 @@ public class JpaMain {
 //            log.info("member1 : {}", member1.getTeam().getName());
 
 
-            // Hibernate 6.0 부터는 distinct 를 사용하지 않아도 엔티티가 중복 발생하지 않는다.
+            // 컬렉션을 페치 조인하면 페이징 api 사용하지 않는 게 좋음. (DB 에서 데이터 싹 다 긁어와서 로직으로 메모리에서 걸러서 처리함..)
+            // 역으로 하면 가능할지라도 컬렉션을 페치 조인하면 어쨋든 컬렉션 만큼의 데이터가 나오기 때문에 애초에
+            // 페이징이 되는 게 이상하긴 함.
+            // 근데 혹시라도 필요하다면!!! 반대로 해서 가져오면 됨.
+            // 또는 그냥 batchSize 설정을 통해 해결.
             List<Team> resultList = em.createQuery("select m from Team m join fetch m.members", Team.class)
+                    .setFirstResult(0) // 컬렉션 페치 조인 시 페이징 api 사용 XX !! 데이터 다 가져와서 메모리에서 처리됨.
+                    .setMaxResults(1)
                     .getResultList();
             for (Team item : resultList) {
                 log.info("result : teamName : {}, memberSize : {}", item.getName(), item.getMembers().size());
