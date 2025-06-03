@@ -32,6 +32,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// query parameter binding log 이쁘게 출력 (가독성 좋게)
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.11.0'
 }
 
 tasks.named('test') {

@@ -1,0 +1,62 @@
+spring:
+#  config:
+#    activate:
+#      on-profile: local
+
+  application:
+    name: jpashop
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/jpashop2
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+#        show_sql: true # ?? ?? ?? (System.out.println()? ???? ??? logging ? ???? ? ?? ?)
+        format_sql: true # ??? ??(?) ??, ? ? ??? ??? ?? ? (???? ?)
+        highlight_sql: true
+
+
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+#    org.hibernate.orm.jdbc.bind: true
+    root: debug
+
+
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: test
+#
+#  application:
+#    name: jpashop
+#
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/jpashop2
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        #        show_sql: true # ?? ?? ?? (System.out.println()? ???? ??? logging ? ???? ? ?? ?)
+#        format_sql: true # ??? ??(?) ??, ? ? ??? ??? ?? ? (???? ?)
+#
+#
+#logging:
+#  level:
+#    org.hibernate.sql: debug
+#    root: debug
