@@ -28,7 +28,7 @@ logging:
     org.hibernate.sql: debug
     org.hibernate.type: trace
 #    org.hibernate.orm.jdbc.bind: true
-    root: debug
+    root: info
 
 
 #---
