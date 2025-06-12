@@ -16,16 +16,16 @@ public class MemberRepository {
         em.persist(member);
     }
 
-    public Member find(String id) {
+    public Member findOne(Long id) {
         return em.find(Member.class, id);
     }
 
-    List<Member> findAll() {
+    public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
 
-    List<Member> findByName(String name) {
+    public List<Member> findByName(String name) {
         return em.createQuery("select m from Member m where m.name = :name", Member.class)
                 .setParameter("name", name)
                 .getResultList();
