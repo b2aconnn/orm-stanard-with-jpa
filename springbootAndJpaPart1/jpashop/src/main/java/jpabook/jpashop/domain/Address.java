@@ -1,8 +1,12 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 @Getter
 public class Address {
