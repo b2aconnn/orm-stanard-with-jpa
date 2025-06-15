@@ -99,6 +99,15 @@ public class OrderRepository {
                                 "join fetch o.delivery d", Order.class)
                 .getResultList();
     }
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select o from Order o " +
+                                "join fetch o.member m " +
+                                "join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 
     // [주의!] 1: N 컬렉션 패치 조인하면 페이징 쿼리가 나가지 않는다!!
     // DB 레벨에서 쿼리로 페이징 처리가 되지 않고, DB에서 다 가져온 다음에
