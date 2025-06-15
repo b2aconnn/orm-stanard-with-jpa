@@ -12,8 +12,8 @@ public class JpashopApplication {
 		SpringApplication.run(JpashopApplication.class, args);
 	}
 
-//	@Bean
-//	public Hibernate6Module hibernate6Module() {
-//		return new Hibernate6Module();
-//	}
+	@Bean
+	public Hibernate6Module hibernate6Module() {
+		return new Hibernate6Module();
+	}
 }
