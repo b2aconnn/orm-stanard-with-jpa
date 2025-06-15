@@ -99,4 +99,19 @@ public class OrderRepository {
                                 "join fetch o.delivery d", Order.class)
                 .getResultList();
     }
+
+    // [주의!] 1: N 컬렉션 패치 조인하면 페이징 쿼리가 나가지 않는다!!
+    // DB 레벨에서 쿼리로 페이징 처리가 되지 않고, DB에서 다 가져온 다음에
+    // 어플리케이션 레벨에서 중복을 제거하고 메로리에서 페이징 처리를 함.
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select o from Order o " +
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d " +
+                        "join fetch o.orderItems oi " +
+                        "join fetch oi.item i", Order.class)
+//                .setFirstResult(0)
+//                .setMaxResults(10)
+                .getResultList();
+    }
 }
