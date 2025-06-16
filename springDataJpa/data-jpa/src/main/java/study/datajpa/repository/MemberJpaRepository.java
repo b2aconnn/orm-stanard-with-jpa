@@ -8,6 +8,7 @@ import study.datajpa.entity.Member;
 import java.util.List;
 import java.util.Optional;
 
+// jpa 예외를 spring 예외로 변환하는 기능을 포함
 @Repository
 public class MemberJpaRepository {
     @PersistenceContext
