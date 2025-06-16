@@ -1,5 +1,6 @@
 package study.datajpa.repository;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Rollback(false)
 class MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
+    @Autowired EntityManager em;
 
     @Test
     void testMember() {
@@ -69,5 +71,21 @@ class MemberRepositoryTest {
 //        assertThat(memberPage.getTotalPages()).isEqualTo(2);
         assertThat(memberPage.isFirst()).isTrue();
         assertThat(memberPage.hasNext()).isTrue();
+    }
+
+    @Test
+    void updateTest() {
+        memberRepository.save(new Member("user1", 20));
+        memberRepository.save(new Member("user2", 20));
+        memberRepository.save(new Member("user3", 30));
+        memberRepository.save(new Member("user4", 10));
+        memberRepository.save(new Member("user5", 10));
+
+        // update 처리하는 거까지는 좋은데, 영속성 컨텍스트에는 관리가 되지 않으므로
+        // 그 다음 조회를 할 때, 데이터가 불일치하는 문제가 생길 수 있다.
+        // 위와 같은 상황에선 영속성 컨텍스트를 초기화해줘야 함.
+        int result = memberRepository.bulkAgePlus(20);
+
+        assertThat(result).isEqualTo(3);
     }
 }
