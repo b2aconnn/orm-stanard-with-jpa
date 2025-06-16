@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.entity.Member;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,4 +100,23 @@ class MemberRepositoryTest {
 
         List<Member> result = memberRepository.findAll();
     }
+
+    @Test
+    void queryHint() {
+        // given
+        memberRepository.save(new Member("user1", 20));
+        em.flush();
+        em.clear();
+
+        // when
+        Member findMember = memberRepository.findRealOnlyByUsername("user1").get();
+        findMember.setUsername("m_user1");
+
+        em.flush();
+    }
+
+    @Test
+    void lock() {
+        memberRepository.findLockByUsername("user1");
+     }
 }
