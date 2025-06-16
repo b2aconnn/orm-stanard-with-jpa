@@ -88,4 +88,15 @@ class MemberRepositoryTest {
 
         assertThat(result).isEqualTo(3);
     }
+
+    @Test
+    void entityGraphTest() {
+        memberRepository.save(new Member("user1", 20));
+        memberRepository.save(new Member("user2", 20));
+        memberRepository.save(new Member("user3", 30));
+        memberRepository.save(new Member("user4", 10));
+        memberRepository.save(new Member("user5", 10));
+
+        List<Member> result = memberRepository.findAll();
+    }
 }
