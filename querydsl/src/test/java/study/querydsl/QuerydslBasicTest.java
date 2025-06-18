@@ -58,12 +58,13 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    void search() {
+    void sort() {
         Member findMember = queryFactory.selectFrom(member)
                 .where(
                         member.username.eq("member1"),
                         member.age.eq(10)
                 )
+                .orderBy(member.age.desc(), member.username.asc().nullsLast())
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
