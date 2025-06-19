@@ -3,6 +3,8 @@ package study.querydsl;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
+import com.querydsl.core.types.dsl.StringExpressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.client.match.JsonPathRequestMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.entity.Member;
@@ -155,6 +158,40 @@ public class QuerydslBasicTest {
                         select(subMember.age.max())
                                 .from(subMember)
                 ))
+                .fetch();
+    }
+
+    @Test
+    void constant() {
+        List<Tuple> tuples = queryFactory
+                .select(member.age, Expressions.constant("A"))
+                .from(member)
+                .where(member.age.eq(40))
+                .fetch();
+
+        for (Tuple tuple : tuples) {
+            System.out.println("=== tuple :" + tuple);
+        }
+    }
+
+    @Test
+    void concat() {
+        // case 1
+        List<String> case1 = queryFactory
+                .select(Expressions.stringTemplate("CONCAT({0}, {1}, {2})", "1, ", "2, ", "3"))
+                .from(member)
+                .where(member.age.eq(40))
+                .fetch();
+
+        for (String result : case1) {
+            System.out.println("=== result :" + result);
+        }
+
+        // case 2
+        List<String> case2 = queryFactory
+                .select(member.username.concat(",").concat(member.age.stringValue()))
+                .from(member)
+                .where(member.age.eq(40))
                 .fetch();
     }
 }
