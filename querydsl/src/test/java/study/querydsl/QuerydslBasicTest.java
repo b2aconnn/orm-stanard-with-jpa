@@ -169,7 +169,7 @@ public class QuerydslBasicTest {
                 .where(member.age.eq(40))
                 .fetch();
 
-        for (Tuple tuple : tuples) {
+         for (Tuple tuple : tuples) {
             System.out.println("=== tuple :" + tuple);
         }
     }
@@ -193,5 +193,19 @@ public class QuerydslBasicTest {
                 .from(member)
                 .where(member.age.eq(40))
                 .fetch();
+    }
+
+    @Test
+    void tupleProjection() {
+        List<Tuple> result = queryFactory.select(member.username, member.age)
+                .from(member)
+                .fetch();
+        
+        result.forEach(tuple -> {
+            String username = tuple.get(member.username);
+            System.out.println("username = " + username);
+            Integer age = tuple.get(member.age);
+            System.out.println("age = " + age);
+        });
     }
 }
