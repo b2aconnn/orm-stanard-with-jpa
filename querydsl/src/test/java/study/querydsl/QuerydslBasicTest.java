@@ -1,7 +1,9 @@
 package study.querydsl;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,11 @@ import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static study.querydsl.entity.QMember.member;
+import static study.querydsl.entity.QTeam.team;
 
 @Transactional
 @SpringBootTest
@@ -68,5 +73,27 @@ public class QuerydslBasicTest {
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    /**
+     * 회원과 팀을 조인하면서, 팀 이름이 teamA인 팀만 조인, 회원은 모두 조회
+     */
+    @Test
+    void joinOnFiltering() {
+//        List<Tuple> teamA = queryFactory
+//                .select(member, team)
+//                .from(member)
+//                .leftJoin(team)
+//                .on(member.team.eq(team).and(team.name.eq("teamA")))
+//                .fetch();
+
+        List<Tuple> teamA = queryFactory
+                .select(member, team)
+                .from(member)
+                .join(member.team, team)
+                .on(team.name.eq("teamA"))
+                .fetch();
+
+        System.out.println("=== TURTLE : " + teamA);
     }
 }
