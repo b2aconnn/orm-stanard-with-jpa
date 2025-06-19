@@ -140,4 +140,21 @@ public class QuerydslBasicTest {
         assertThat(result).extracting("age")
                 .containsExactly(40);
     }
+
+    @Test
+    void basicCase() {
+        QMember subMember = new QMember("subMember");
+
+        List<String> result = queryFactory
+                .select(member.age
+                        .when(10).then("열살")
+                        .when(20).then("스무살")
+                        .otherwise("기타").as("age"))
+                .from(member)
+                .where(member.age.eq(
+                        select(subMember.age.max())
+                                .from(subMember)
+                ))
+                .fetch();
+    }
 }
