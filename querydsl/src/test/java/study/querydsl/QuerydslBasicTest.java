@@ -331,4 +331,18 @@ public class QuerydslBasicTest {
                 .where(member.age.gt(18))
                 .execute();
     }
+
+    // 각 DB의 Dialect(ex. H2Dialect) 를 확인해서 function 가능한 지 확인 후
+    // 없으면 extends 해서 사용해야 함.
+    @Test
+    void sqlFunction() {
+        List<String> result = queryFactory.select(Expressions.stringTemplate(
+                        "function('replace', {0}, {1}, {2})", member.username, "member", "M"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
 }
