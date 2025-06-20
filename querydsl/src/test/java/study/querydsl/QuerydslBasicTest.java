@@ -314,4 +314,21 @@ public class QuerydslBasicTest {
     private Predicate ageEq(Integer ageCond) {
         return ageCond != null ? member.age.eq(ageCond) : null;
     }
+
+    @Test
+    void bulkUpdate() {
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+    }
+
+    @Test
+    void bulkDelete() {
+        long count = queryFactory
+                .delete(member)
+                .where(member.age.gt(18))
+                .execute();
+    }
 }
