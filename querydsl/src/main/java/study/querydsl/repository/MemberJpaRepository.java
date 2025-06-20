@@ -2,6 +2,7 @@ package study.querydsl.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import study.querydsl.entity.Member;
 
